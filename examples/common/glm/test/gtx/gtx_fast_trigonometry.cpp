@@ -31,8 +31,8 @@ namespace fastCos
 		const std::clock_t timestamp3 = std::clock();
 		const std::clock_t time_fast = timestamp2 - timestamp1;
 		const std::clock_t time_default = timestamp3 - timestamp2;
-		std::printf("fastCos Time %d clocks\n", static_cast<unsigned int>(time_fast));
-		std::printf("cos Time %d clocks\n", static_cast<unsigned int>(time_default));
+		std::printf("fastCos Time %d clocks\n", static_cast<int>(time_fast));
+		std::printf("cos Time %d clocks\n", static_cast<int>(time_default));
 
 		return time_fast <= time_default ? 0 : 1;
 	}
@@ -65,8 +65,8 @@ namespace fastSin
 		const std::clock_t timestamp3 = std::clock();
 		const std::clock_t time_fast = timestamp2 - timestamp1;
 		const std::clock_t time_default = timestamp3 - timestamp2;
-		std::printf("fastSin Time %d clocks\n", static_cast<unsigned int>(time_fast));
-		std::printf("sin Time %d clocks\n", static_cast<unsigned int>(time_default));
+		std::printf("fastSin Time %d clocks\n", static_cast<int>(time_fast));
+		std::printf("sin Time %d clocks\n", static_cast<int>(time_default));
 
 		return time_fast <= time_default ? 0 : 1;
 	}
@@ -91,8 +91,8 @@ namespace fastTan
 		const std::clock_t timestamp3 = std::clock();
 		const std::clock_t time_fast = timestamp2 - timestamp1;
 		const std::clock_t time_default = timestamp3 - timestamp2;
-		std::printf("fastTan Time %d clocks\n", static_cast<unsigned int>(time_fast));
-		std::printf("tan Time %d clocks\n", static_cast<unsigned int>(time_default));
+		std::printf("fastTan Time %d clocks\n", static_cast<int>(time_fast));
+		std::printf("tan Time %d clocks\n", static_cast<int>(time_default));
 
 		return time_fast <= time_default ? 0 : 1;
 	}
@@ -118,8 +118,8 @@ namespace fastAcos
 		const std::clock_t time_fast = timestamp2 - timestamp1;
 		const std::clock_t time_default = timestamp3 - timestamp2;
 
-		std::printf("fastAcos Time %d clocks\n", static_cast<unsigned int>(time_fast));
-		std::printf("acos Time %d clocks\n", static_cast<unsigned int>(time_default));
+		std::printf("fastAcos Time %d clocks\n", static_cast<int>(time_fast));
+		std::printf("acos Time %d clocks\n", static_cast<int>(time_default));
 
 		return time_fast <= time_default ? 0 : 1;
 	}
@@ -141,8 +141,8 @@ namespace fastAsin
 		const std::clock_t timestamp3 = std::clock();
 		const std::clock_t time_fast = timestamp2 - timestamp1;
 		const std::clock_t time_default = timestamp3 - timestamp2;
-		std::printf("fastAsin Time %d clocks\n", static_cast<unsigned int>(time_fast));
-		std::printf("asin Time %d clocks\n", static_cast<unsigned int>(time_default));
+		std::printf("fastAsin Time %d clocks\n", static_cast<int>(time_fast));
+		std::printf("asin Time %d clocks\n", static_cast<int>(time_default));
 
 		return time_fast <= time_default ? 0 : 1;
 	}
@@ -164,8 +164,8 @@ namespace fastAtan
 		const std::clock_t timestamp3 = std::clock();
 		const std::clock_t time_fast = timestamp2 - timestamp1;
 		const std::clock_t time_default = timestamp3 - timestamp2;
-		std::printf("fastAtan Time %d clocks\n", static_cast<unsigned int>(time_fast));
-		std::printf("atan Time %d clocks\n", static_cast<unsigned int>(time_default));
+		std::printf("fastAtan Time %d clocks\n", static_cast<int>(time_fast));
+		std::printf("atan Time %d clocks\n", static_cast<int>(time_default));
 
 		return time_fast <= time_default ? 0 : 1;
 	}
@@ -173,17 +173,18 @@ namespace fastAtan
 
 namespace taylorCos
 {
-	using glm::precision;
+	using glm::qualifier;
+	using glm::length_t;
 	
-	glm::vec4 const AngleShift(0.0f, glm::pi<float>() * 0.5f, glm::pi<float>() * 1.0f, glm::pi<float>() * 1.5f);
+	glm::vec4 const AngleShift(0.0f, glm::half_pi<float>(), glm::pi<float>(), glm::three_over_two_pi<float>());
 
-	template<glm::length_t L, typename T, precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, T, P> taylorSeriesNewCos(vecType<L, T, P> const & x)
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, T, Q> taylorSeriesNewCos(glm::vec<L, T, Q> const& x)
 	{
-		vecType<L, T, P> const Powed2(x * x);
-		vecType<L, T, P> const Powed4(Powed2 * Powed2);
-		vecType<L, T, P> const Powed6(Powed4 * Powed2);
-		vecType<L, T, P> const Powed8(Powed4 * Powed4);
+		glm::vec<L, T, Q> const Powed2(x * x);
+		glm::vec<L, T, Q> const Powed4(Powed2 * Powed2);
+		glm::vec<L, T, Q> const Powed6(Powed4 * Powed2);
+		glm::vec<L, T, Q> const Powed8(Powed4 * Powed4);
 
 		return static_cast<T>(1)
 			- Powed2 * static_cast<T>(0.5)
@@ -192,12 +193,12 @@ namespace taylorCos
 			+ Powed8 * static_cast<T>(2.4801587301587301587301587301587e-5);
 	}
 
-	template<glm::length_t L, typename T, precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, T, P> taylorSeriesNewCos6(vecType<L, T, P> const & x)
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, T, Q> taylorSeriesNewCos6(glm::vec<L, T, Q> const& x)
 	{
-		vecType<L, T, P> const Powed2(x * x);
-		vecType<L, T, P> const Powed4(Powed2 * Powed2);
-		vecType<L, T, P> const Powed6(Powed4 * Powed2);
+		glm::vec<L, T, Q> const Powed2(x * x);
+		glm::vec<L, T, Q> const Powed4(Powed2 * Powed2);
+		glm::vec<L, T, Q> const Powed6(Powed4 * Powed2);
 
 		return static_cast<T>(1)
 			- Powed2 * static_cast<T>(0.5)
@@ -205,8 +206,8 @@ namespace taylorCos
 			- Powed6 * static_cast<T>(0.00138888888888888888888888888889);
 	}
 
-	template<glm::length_t L, precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, float, P> fastAbs(vecType<L, float, P> x)
+	template<glm::length_t L, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, float, Q> fastAbs(glm::vec<L, float, Q> x)
 	{
 		int* Pointer = reinterpret_cast<int*>(&x[0]);
 		Pointer[0] &= 0x7fffffff;
@@ -216,17 +217,17 @@ namespace taylorCos
 		return x;
 	}
 
-	template<glm::length_t L, typename T, glm::precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, T, P> fastCosNew(vecType<L, T, P> const & x)
+	template<glm::length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, T, Q> fastCosNew(glm::vec<L, T, Q> const& x)
 	{
-		vecType<L, T, P> const Angle0_PI(fastAbs(fmod(x + glm::pi<T>(), glm::two_pi<T>()) - glm::pi<T>()));
+		glm::vec<L, T, Q> const Angle0_PI(fastAbs(fmod(x + glm::pi<T>(), glm::two_pi<T>()) - glm::pi<T>()));
 		return taylorSeriesNewCos6(x);
 /*
-		vecType<L, bool, P> const FirstQuarterPi(lessThanEqual(Angle0_PI, vecType<L, T, P>(glm::half_pi<T>())));
+		vec<L, bool, Q> const FirstQuarterPi(lessThanEqual(Angle0_PI, vec<L, T, Q>(glm::half_pi<T>())));
 
-		vecType<L, T, P> const RevertAngle(mix(vecType<L, T, P>(glm::pi<T>()), vecType<L, T, P>(0), FirstQuarterPi));
-		vecType<L, T, P> const ReturnSign(mix(vecType<L, T, P>(-1), vecType<L, T, P>(1), FirstQuarterPi));
-		vecType<L, T, P> const SectionAngle(RevertAngle - Angle0_PI);
+		vec<L, T, Q> const RevertAngle(mix(vec<L, T, Q>(glm::pi<T>()), vec<L, T, Q>(0), FirstQuarterPi));
+		vec<L, T, Q> const ReturnSign(mix(vec<L, T, Q>(-1), vec<L, T, Q>(1), FirstQuarterPi));
+		vec<L, T, Q> const SectionAngle(RevertAngle - Angle0_PI);
 
 		return ReturnSign * taylorSeriesNewCos(SectionAngle);
 */
@@ -246,7 +247,7 @@ namespace taylorCos
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("fastCosNew %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("fastCosNew %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)
@@ -254,21 +255,21 @@ namespace taylorCos
 		return Error;
 	}
 
-	template<glm::length_t L, typename T, precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, T, P> deterministic_fmod(vecType<L, T, P> const & x, T y)
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, T, Q> deterministic_fmod(glm::vec<L, T, Q> const& x, T y)
 	{
 		return x - y * trunc(x / y);
 	}
 
-	template<glm::length_t L, typename T, precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, T, P> fastCosDeterminisctic(vecType<L, T, P> const & x)
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, T, Q> fastCosDeterminisctic(glm::vec<L, T, Q> const& x)
 	{
-		vecType<L, T, P> const Angle0_PI(abs(deterministic_fmod(x + glm::pi<T>(), glm::two_pi<T>()) - glm::pi<T>()));
-		vecType<L, bool, P> const FirstQuarterPi(lessThanEqual(Angle0_PI, vecType<L, T, P>(glm::half_pi<T>())));
+		glm::vec<L, T, Q> const Angle0_PI(abs(deterministic_fmod(x + glm::pi<T>(), glm::two_pi<T>()) - glm::pi<T>()));
+		glm::vec<L, bool, Q> const FirstQuarterPi(lessThanEqual(Angle0_PI, glm::vec<L, T, Q>(glm::half_pi<T>())));
 
-		vecType<L, T, P> const RevertAngle(mix(vecType<L, T, P>(glm::pi<T>()), vecType<L, T, P>(0), FirstQuarterPi));
-		vecType<L, T, P> const ReturnSign(mix(vecType<L, T, P>(-1), vecType<L, T, P>(1), FirstQuarterPi));
-		vecType<L, T, P> const SectionAngle(RevertAngle - Angle0_PI);
+		glm::vec<L, T, Q> const RevertAngle(mix(glm::vec<L, T, Q>(glm::pi<T>()), glm::vec<L, T, Q>(0), FirstQuarterPi));
+		glm::vec<L, T, Q> const ReturnSign(mix(glm::vec<L, T, Q>(-1), glm::vec<L, T, Q>(1), FirstQuarterPi));
+		glm::vec<L, T, Q> const SectionAngle(RevertAngle - Angle0_PI);
 
 		return ReturnSign * taylorSeriesNewCos(SectionAngle);
 	}
@@ -287,7 +288,7 @@ namespace taylorCos
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("fastCosDeterminisctic %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("fastCosDeterminisctic %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)
@@ -295,8 +296,8 @@ namespace taylorCos
 		return Error;
 	}
 
-	template<glm::length_t L, typename T, precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, T, P> taylorSeriesRefCos(vecType<L, T, P> const & x)
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, T, Q> taylorSeriesRefCos(glm::vec<L, T, Q> const& x)
 	{
 		return static_cast<T>(1)
 			- (x * x) / glm::factorial(static_cast<T>(2))
@@ -305,17 +306,17 @@ namespace taylorCos
 			+ (x * x * x * x * x * x * x * x) / glm::factorial(static_cast<T>(8));
 	}
 
-	template<glm::length_t L, typename T, precision P, template<glm::length_t, typename, precision> class vecType>
-	GLM_FUNC_QUALIFIER vecType<L, T, P> fastRefCos(vecType<L, T, P> const & x)
+	template<length_t L, typename T, qualifier Q>
+	GLM_FUNC_QUALIFIER glm::vec<L, T, Q> fastRefCos(glm::vec<L, T, Q> const& x)
 	{
-		vecType<L, T, P> const Angle0_PI(glm::abs(fmod(x + glm::pi<T>(), glm::two_pi<T>()) - glm::pi<T>()));
+		glm::vec<L, T, Q> const Angle0_PI(glm::abs(fmod(x + glm::pi<T>(), glm::two_pi<T>()) - glm::pi<T>()));
 //		return taylorSeriesRefCos(Angle0_PI);
 
-		vecType<L, bool, P> const FirstQuarterPi(lessThanEqual(Angle0_PI, vecType<L, T, P>(glm::half_pi<T>())));
+		glm::vec<L, bool, Q> const FirstQuarterPi(lessThanEqual(Angle0_PI, glm::vec<L, T, Q>(glm::half_pi<T>())));
 
-		vecType<L, T, P> const RevertAngle(mix(vecType<L, T, P>(glm::pi<T>()), vecType<L, T, P>(0), FirstQuarterPi));
-		vecType<L, T, P> const ReturnSign(mix(vecType<L, T, P>(-1), vecType<L, T, P>(1), FirstQuarterPi));
-		vecType<L, T, P> const SectionAngle(RevertAngle - Angle0_PI);
+		glm::vec<L, T, Q> const RevertAngle(mix(glm::vec<L, T, Q>(glm::pi<T>()), glm::vec<L, T, Q>(0), FirstQuarterPi));
+		glm::vec<L, T, Q> const ReturnSign(mix(glm::vec<L, T, Q>(-1), glm::vec<L, T, Q>(1), FirstQuarterPi));
+		glm::vec<L, T, Q> const SectionAngle(RevertAngle - Angle0_PI);
 
 		return ReturnSign * taylorSeriesRefCos(SectionAngle);
 	}
@@ -334,7 +335,7 @@ namespace taylorCos
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("fastCosRef %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("fastCosRef %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)
@@ -356,7 +357,7 @@ namespace taylorCos
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("fastCosOld %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("fastCosOld %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)
@@ -378,7 +379,7 @@ namespace taylorCos
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("cos %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("cos %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)
@@ -418,7 +419,7 @@ namespace taylorCos
 			float const Cos1 = taylorCos::fastRefCos(glm::fvec1(radAngle)).x;
 			Error += glm::abs(Cos1 - Cos0) < 0.1f ? 0 : 1;
 
-			float const Cos2 = taylorCos::fastCosNew(glm::fvec1(radAngle)).x;
+			//float const Cos2 = taylorCos::fastCosNew(glm::fvec1(radAngle)).x;
 			//Error += glm::abs(Cos2 - Cos0) < 0.1f ? 0 : 1;
 
 			assert(!Error);
@@ -473,7 +474,7 @@ namespace taylor2
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("taylorCosA %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("taylorCosA %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)
@@ -495,7 +496,7 @@ namespace taylor2
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("taylorCosB %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("taylorCosB %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)
@@ -517,7 +518,7 @@ namespace taylor2
 
 		std::clock_t const TimeStampEnd = std::clock();
 
-		std::printf("taylorCosC %ld clocks\n", TimeStampEnd - TimeStampBegin);
+		std::printf("taylorCosC %d clocks\n", static_cast<int>(TimeStampEnd - TimeStampBegin));
 
 		int Error = 0;
 		for(std::size_t i = 0; i < Samples; ++i)

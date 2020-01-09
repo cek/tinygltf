@@ -1,9 +1,11 @@
+#include <glm/packing.hpp>
 #include <glm/gtc/packing.hpp>
 #include <glm/gtc/epsilon.hpp>
+#include <glm/ext/vector_relational.hpp>
 #include <cstdio>
 #include <vector>
 
-void print_bits(float const & s)
+void print_bits(float const& s)
 {
 	union
 	{
@@ -22,7 +24,7 @@ void print_bits(float const & s)
 	}
 }
 
-void print_10bits(glm::uint const & s)
+void print_10bits(glm::uint const& s)
 {
 	printf("10b: ");
 	for(std::size_t j = 10; j > 0; --j)
@@ -33,7 +35,7 @@ void print_10bits(glm::uint const & s)
 	}
 }
 
-void print_11bits(glm::uint const & s)
+void print_11bits(glm::uint const& s)
 {
 	printf("11b: ");
 	for(std::size_t j = 11; j > 0; --j)
@@ -44,9 +46,9 @@ void print_11bits(glm::uint const & s)
 	}
 }
 
-void print_value(float const & s)
+void print_value(float const& s)
 {
-	printf("%2.5f, ", s);
+	printf("%2.5f, ", static_cast<double>(s));
 	print_bits(s);
 	printf(", ");
 //	print_11bits(detail::floatTo11bit(s));
@@ -69,11 +71,11 @@ int test_Half1x16()
 
 	for(std::size_t i = 0; i < Tests.size(); ++i)
 	{
-		glm::uint32 p0 = glm::packHalf1x16(Tests[i]);
+		glm::uint16 p0 = glm::packHalf1x16(Tests[i]);
 		float v0 = glm::unpackHalf1x16(p0);
-		glm::uint32 p1 = glm::packHalf1x16(v0);
+		glm::uint16 p1 = glm::packHalf1x16(v0);
 		float v1 = glm::unpackHalf1x16(p1);
-		Error += (v0 == v1) ? 0 : 1;
+		Error += glm::epsilonEqual(v0, v1, glm::epsilon<float>()) ? 0 : 1;
 	}
 
 	return Error;
@@ -100,8 +102,8 @@ int test_Half4x16()
 		glm::u16vec4 p2 = glm::packHalf(v0);
 		glm::vec4 v2 = glm::unpackHalf(p2);
 
-		Error += glm::all(glm::equal(v0, v1)) ? 0 : 1;
-		Error += glm::all(glm::equal(v0, v2)) ? 0 : 1;
+		Error += glm::all(glm::equal(v0, v1, glm::epsilon<float>())) ? 0 : 1;
+		Error += glm::all(glm::equal(v0, v2, glm::epsilon<float>())) ? 0 : 1;
 	}
 
 	return Error;
@@ -153,7 +155,7 @@ int test_U3x10_1x2()
 	}
 
 	glm::u8vec4 const v0(0xff, 0x77, 0x0, 0x33);
-	glm::uint32 const p0 = *(glm::uint32*)(&v0[0]);
+	glm::uint32 const p0 = *reinterpret_cast<glm::uint32 const*>(&v0[0]);
 	glm::uint32 const r0 = 0x330077ff;
 
 	Error += p0 == r0 ? 0 : 1;
@@ -235,7 +237,7 @@ int test_F2x11_1x10()
 		glm::vec3 v0 = glm::unpackF2x11_1x10(p0);
 		glm::uint32 p1 = glm::packF2x11_1x10(v0);
 		glm::vec3 v1 = glm::unpackF2x11_1x10(p1);
-		Error += glm::all(glm::equal(v0, v1)) ? 0 : 1;
+		Error += glm::all(glm::equal(v0, v1, glm::epsilon<float>())) ? 0 : 1;
 	}
 
 	return Error;
@@ -259,7 +261,7 @@ int test_F3x9_E1x5()
 		glm::vec3 v0 = glm::unpackF3x9_E1x5(p0);
 		glm::uint32 p1 = glm::packF3x9_E1x5(v0);
 		glm::vec3 v1 = glm::unpackF3x9_E1x5(p1);
-		Error += glm::all(glm::epsilonEqual(v0, v1, 0.01f)) ? 0 : 1;
+		Error += glm::all(glm::equal(v0, v1, glm::epsilon<float>())) ? 0 : 1;
 	}
 
 	return Error;
@@ -271,11 +273,11 @@ int test_RGBM()
 
 	for(std::size_t i = 0; i < 1024; ++i)
 	{
-		glm::vec3 const Color(i);
+		glm::vec3 const Color(static_cast<float>(i));
 		glm::vec4 const RGBM = glm::packRGBM(Color);
 		glm::vec3 const Result= glm::unpackRGBM(RGBM);
 
-		Error += glm::all(glm::epsilonEqual(Color, Result, 0.01f)) ? 0 : 1;
+		Error += glm::all(glm::equal(Color, Result, 0.01f)) ? 0 : 1;
 	}
 
 	return Error;
@@ -294,7 +296,7 @@ int test_packUnorm1x16()
 	for(std::size_t i = 0; i < A.size(); ++i)
 	{
 		glm::vec1 B(A[i]);
-		glm::uint32 C = glm::packUnorm1x16(B.x);
+		glm::uint16 C = glm::packUnorm1x16(B.x);
 		glm::vec1 D(glm::unpackUnorm1x16(C));
 		Error += glm::all(glm::epsilonEqual(B, D, 1.0f / 65535.f)) ? 0 : 1;
 		assert(!Error);
@@ -316,7 +318,7 @@ int test_packSnorm1x16()
 	for(std::size_t i = 0; i < A.size(); ++i)
 	{
 		glm::vec1 B(A[i]);
-		glm::uint32 C = glm::packSnorm1x16(B.x);
+		glm::uint16 C = glm::packSnorm1x16(B.x);
 		glm::vec1 D(glm::unpackSnorm1x16(C));
 		Error += glm::all(glm::epsilonEqual(B, D, 1.0f / 32767.0f * 2.0f)) ? 0 : 1;
 	}

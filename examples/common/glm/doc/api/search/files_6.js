@@ -1,16 +1,14 @@
 var searchData=
 [
-  ['fast_5fexponential_2ehpp',['fast_exponential.hpp',['../a00027.html',1,'']]],
-  ['fast_5fsquare_5froot_2ehpp',['fast_square_root.hpp',['../a00028.html',1,'']]],
-  ['fast_5ftrigonometry_2ehpp',['fast_trigonometry.hpp',['../a00029.html',1,'']]],
-  ['func_5fcommon_2ehpp',['func_common.hpp',['../a00030.html',1,'']]],
-  ['func_5fexponential_2ehpp',['func_exponential.hpp',['../a00031.html',1,'']]],
-  ['func_5fgeometric_2ehpp',['func_geometric.hpp',['../a00032.html',1,'']]],
-  ['func_5finteger_2ehpp',['func_integer.hpp',['../a00033.html',1,'']]],
-  ['func_5fmatrix_2ehpp',['func_matrix.hpp',['../a00034.html',1,'']]],
-  ['func_5fpacking_2ehpp',['func_packing.hpp',['../a00035.html',1,'']]],
-  ['func_5ftrigonometric_2ehpp',['func_trigonometric.hpp',['../a00036.html',1,'']]],
-  ['func_5fvector_5frelational_2ehpp',['func_vector_relational.hpp',['../a00037.html',1,'']]],
-  ['functions_2ehpp',['functions.hpp',['../a00038.html',1,'']]],
-  ['fwd_2ehpp',['fwd.hpp',['../a00039.html',1,'']]]
+  ['color_5fspace_2ehpp',['color_space.hpp',['../a01346.html',1,'(Global Namespace)'],['../a01349.html',1,'(Global Namespace)']]],
+  ['common_2ehpp',['common.hpp',['../a01352.html',1,'']]],
+  ['geometric_2ehpp',['geometric.hpp',['../a00383.html',1,'']]],
+  ['glm_2ehpp',['glm.hpp',['../a00386.html',1,'']]],
+  ['gradient_5fpaint_2ehpp',['gradient_paint.hpp',['../a00497.html',1,'']]],
+  ['integer_2ehpp',['integer.hpp',['../a01355.html',1,'(Global Namespace)'],['../a01358.html',1,'(Global Namespace)']]],
+  ['matrix_5ftransform_2ehpp',['matrix_transform.hpp',['../a01364.html',1,'']]],
+  ['packing_2ehpp',['packing.hpp',['../a01367.html',1,'']]],
+  ['quaternion_2ehpp',['quaternion.hpp',['../a01370.html',1,'(Global Namespace)'],['../a01373.html',1,'(Global Namespace)']]],
+  ['scalar_5frelational_2ehpp',['scalar_relational.hpp',['../a01379.html',1,'']]],
+  ['type_5faligned_2ehpp',['type_aligned.hpp',['../a01382.html',1,'(Global Namespace)'],['../a01385.html',1,'(Global Namespace)']]]
 ];

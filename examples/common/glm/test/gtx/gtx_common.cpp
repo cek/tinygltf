@@ -106,13 +106,44 @@ namespace fmod_
 
 int test_isdenormal()
 {
-	int Error(0);
+	int Error = 0;
 
 	bool A = glm::isdenormal(1.0f);
+	Error += !A ? 0 : 1;
+
 	glm::bvec1 B = glm::isdenormal(glm::vec1(1.0f));
+	Error += !glm::any(B) ? 0 : 1;
+
 	glm::bvec2 C = glm::isdenormal(glm::vec2(1.0f));
+	Error += !glm::any(C) ? 0 : 1;
+
 	glm::bvec3 D = glm::isdenormal(glm::vec3(1.0f));
+	Error += !glm::any(D) ? 0 : 1;
+
 	glm::bvec4 E = glm::isdenormal(glm::vec4(1.0f));
+	Error += !glm::any(E) ? 0 : 1;
+
+	return Error;
+}
+
+int test_openBounded()
+{
+	int Error = 0;
+
+	Error += glm::all(glm::openBounded(glm::ivec2(2), glm::ivec2(1), glm::ivec2(3))) ? 0 : 1;
+	Error += !glm::all(glm::openBounded(glm::ivec2(1), glm::ivec2(1), glm::ivec2(3))) ? 0 : 1;
+	Error += !glm::all(glm::openBounded(glm::ivec2(3), glm::ivec2(1), glm::ivec2(3))) ? 0 : 1;
+
+	return Error;
+}
+
+int test_closeBounded()
+{
+	int Error = 0;
+
+	Error += glm::all(glm::closeBounded(glm::ivec2(2), glm::ivec2(1), glm::ivec2(3))) ? 0 : 1;
+	Error += glm::all(glm::closeBounded(glm::ivec2(1), glm::ivec2(1), glm::ivec2(3))) ? 0 : 1;
+	Error += glm::all(glm::closeBounded(glm::ivec2(3), glm::ivec2(1), glm::ivec2(3))) ? 0 : 1;
 
 	return Error;
 }
@@ -123,6 +154,8 @@ int main()
 
 	Error += test_isdenormal();
 	Error += ::fmod_::test();
+	Error += test_openBounded();
+	Error += test_closeBounded();
 
 	return Error;
 }
