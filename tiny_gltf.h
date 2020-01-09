@@ -82,9 +82,6 @@
 #define DEFAULT_METHODS(x)             \
   ~x() = default;                      \
   x(const x &) = default;              \
-#ifndef NVCC
-  x(x &&) TINYGLTF_NOEXCEPT = default; \
-#endif
   x &operator=(const x &) = default;   \
   x &operator=(x &&) TINYGLTF_NOEXCEPT = default;
 
